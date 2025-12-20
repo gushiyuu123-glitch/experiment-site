@@ -1,0 +1,308 @@
+/* =========================================
+   BLUE AWAKE — Global Reset
+========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  height: 100%;
+  background: #06080c;
+  color: #e8ecff;
+  overflow: hidden;
+  font-family: 'Fira Code', monospace;
+}
+
+/* =========================================
+   Intro Root
+========================================= */
+.intro-root {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1400px; /* ← 演出深度強化 */
+}
+
+/* =========================================
+   ① コードフラッシュライン
+========================================= */
+.intro-lines {
+  position: absolute;
+  top: 18vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 520px;
+  max-width: 80%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.intro-line {
+  color: rgba(150,200,255,0.9);
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  opacity: 0;
+  text-shadow:
+    0 0 12px rgba(120,180,255,0.4),
+    0 0 22px rgba(120,180,255,0.25),
+    0 0 42px rgba(120,180,255,0.15);
+}
+
+/* =========================================
+   ② Silent Flash（柔らかい白青）
+========================================= */
+.intro-flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(190,220,255,0.7),
+    rgba(100,140,200,0.35),
+    transparent 70%
+  );
+  opacity: 0;
+  z-index: 999;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* =========================================
+   ③ 背景 + Aurora（生命レイヤー）
+========================================= */
+.intro-bg {
+  position: fixed;
+  inset: 0;
+  background: url("/zikkentop.png") center/cover no-repeat;
+  opacity: 0;
+  transform: scale(1.1);
+  filter: brightness(.88) contrast(1.2) saturate(1.2);
+  transition: opacity 1.6s ease, transform 2.4s ease;
+  z-index: 1;
+}
+
+/* ---- aurora main glow ---- */
+.intro-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 60% 38%, rgba(90,150,255,0.4), transparent 65%),
+    linear-gradient(130deg, rgba(80,130,255,0.28), transparent);
+  mix-blend-mode: screen;
+  animation: auroraShift 10s ease-in-out infinite alternate;
+}
+
+@keyframes auroraShift {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  100% { filter: hue-rotate(65deg) brightness(1.38); }
+}
+
+/* ---- aurora drift layer 1（息づく光） ---- */
+.intro-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at 28% 72%,
+      rgba(120,170,255,0.22),
+      transparent 55%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.42;
+  animation: auroraDrift1 8.5s ease-in-out infinite alternate;
+}
+
+@keyframes auroraDrift1 {
+  0% { transform: translate(-26px, 0) scale(1); opacity: 0.3; }
+  100% { transform: translate(18px, -14px) scale(1.16); opacity: 0.6; }
+}
+
+/* =========================================
+   ④ 光のリング（呼吸＋静かな脈動）
+========================================= */
+.intro-ring {
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 440px;
+  height: 440px;
+  border: 1px solid rgba(120,180,255,0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  opacity: 0;
+  mix-blend-mode: screen;
+  filter: blur(1.7px);
+  z-index: 4;
+
+  /* 呼吸アニメ */
+  animation: ringPulse 7s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.85); }
+  50%      { transform: translate(-50%, -50%) scale(0.95); }
+}
+
+/* =========================================
+   ⑤ タイトル（破片 × 青白グロウ）
+========================================= */
+.intro-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  translate: -50% -50%;
+  opacity: 0;
+  color: #E9EDF5;
+
+  text-shadow:
+    0 0 14px rgba(120,180,255,.45),
+    0 0 40px rgba(120,180,255,.27),
+    0 0 90px rgba(90,150,255,0.18),
+    0 0 130px rgba(80,140,255,0.14);
+
+  z-index: 10;
+}
+
+/* 破片（固定） */
+.title-char {
+  display: inline-block;
+  white-space: pre;
+  position: relative;
+  opacity: 0;
+  text-shadow:
+    0 0 14px rgba(120,180,255,0.55),
+    0 0 32px rgba(120,180,255,0.32),
+    0 0 60px rgba(90,150,255,0.25);
+
+  transition: transform 0.35s ease;
+}
+
+/* =========================================
+   ⑥ サブタイトル（静音の残光）
+========================================= */
+.intro-sub {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  color: rgba(230,235,255,.92);
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  opacity: 0;
+
+  text-shadow:
+    0 0 10px rgba(120,160,255,0.28),
+    0 0 20px rgba(120,160,255,0.18);
+
+  letter-spacing: .06em;
+  z-index: 10;
+}
+
+/* =========================================
+   ⑦ Noa Fragment（断片意識）
+========================================= */
+.noa-fragment {
+  position: fixed;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  color: rgba(160,210,255,0.82);
+  text-shadow:
+    0 0 8px rgba(120,180,255,0.4),
+    0 0 18px rgba(80,140,255,0.28);
+
+  mix-blend-mode: screen;
+  filter: blur(1px);
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* =========================================
+   青い稲妻（Blue Bolt）
+========================================= */
+.blue-bolt {
+  position: fixed;
+  top: 48%;
+  left: 50%;
+  width: 48vw;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(160,200,255,0.95),
+    transparent
+  );
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  filter: blur(1px);
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* =========================================
+   歪みレイヤー（Distortion Pulse）
+========================================= */
+.distort-layer {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(2px) brightness(1.26);
+  mix-blend-mode: screen;
+  z-index: 35;
+  pointer-events: none;
+}
+/* 斜め切り用：レイヤーマスク */
+.slice-top {
+  clip-path: polygon(0 0, 100% 0, 100% 60%, 0 80%);
+}
+
+.slice-bottom {
+  clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* =========================================
+   スマホ最適化
+========================================= */
+@media (max-width: 520px) {
+  .intro-title { font-size: 2.6rem; }
+  .intro-ring { width: 300px; height: 300px; }
+  .intro-lines { top: 15vh; }
+  .noa-fragment { font-size: 0.8rem; }
+  .blue-bolt { width: 60vw; }
+}
+.blue-blade {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 140vw;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(180,220,255,0.95),
+    rgba(120,170,255,0.7),
+    transparent
+  );
+  transform-origin: center;
+  mix-blend-mode: screen;
+  filter: blur(1.5px) brightness(1.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+.background-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none; /* ← クリック透過 */
+}
+
+.foreground-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 100;
+}
